@@ -1,4 +1,13 @@
-# Binaries for programs and plugins
+# Config files
+config.json
+!config.json.example
+quotes_backup.json
+
+# Database files
+*.db
+*.db-journal
+
+# Binary files
 *.exe
 *.exe~
 *.dll
@@ -13,3 +22,9 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
