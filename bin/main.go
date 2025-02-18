@@ -104,7 +104,6 @@ func NewBot(config Config) (*Bot, error) {
 	// Register command handlers
 	bot.commands["!quote"] = bot.handleQuote
 	bot.commands["!addquote"] = bot.handleAddQuote
-	bot.commands["!listquotes"] = bot.handleListQuotes
 	bot.commands["!delquote"] = bot.handleDeleteQuote
 	bot.commands["!adduser"] = bot.handleAddUser
 	bot.commands["!listusers"] = bot.handleListUsers
@@ -300,61 +299,6 @@ func (b *Bot) handleAddContext(s *discordgo.Session, m *discordgo.MessageCreate)
 	}
 
 	_, err = s.ChannelMessageSend(m.ChannelID, "Context added successfully")
-	return err
-}
-
-// handleListQuotes lists all quotes for a user
-func (b *Bot) handleListQuotes(s *discordgo.Session, m *discordgo.MessageCreate) error {
-	parts := strings.SplitN(m.Content, " ", 2)
-	if len(parts) < 2 {
-		_, err := s.ChannelMessageSend(m.ChannelID, "Usage: !listquotes <user_id>")
-		return err
-	}
-
-	userID := parts[1]
-	rows, err := db.Query(`
-		SELECT id, text, context, use_count, added_at, added_by 
-		FROM quotes 
-		WHERE user_id = ?
-		ORDER BY added_at DESC
-	`, userID)
-	if err != nil {
-		return err
-	}
-	defer rows.Close()
-
-	var quotes []Quote
-	for rows.Next() {
-		var (
-			q           Quote
-			contextNull sql.NullString
-		)
-		err := rows.Scan(&q.ID, &q.Text, &contextNull, &q.UseCount, &q.AddedAt, &q.AddedBy)
-		if err != nil {
-			return err
-		}
-		if contextNull.Valid {
-			q.Context = contextNull.String
-		}
-		quotes = append(quotes, q)
-	}
-
-	if len(quotes) == 0 {
-		_, err := s.ChannelMessageSend(m.ChannelID, "No quotes found for this user")
-		return err
-	}
-
-	message := fmt.Sprintf("Quotes for user:\n")
-	for _, q := range quotes {
-		message += fmt.Sprintf("%d. %s", q.ID, q.Text)
-		if q.Context != "" {
-			message += fmt.Sprintf(" (Context: %s)", q.Context)
-		}
-		message += fmt.Sprintf(" [Used %d times, Added by %s on %s]\n",
-			q.UseCount, q.AddedBy, q.AddedAt.Format("2006-01-02"))
-	}
-
-	_, err = s.ChannelMessageSend(m.ChannelID, message)
 	return err
 }
 

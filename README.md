@@ -74,7 +74,6 @@ go get github.com/mattn/go-sqlite3
 
 ### User Commands
 - `!quote <user>` - Get a random quote from a user
-- `!listquotes <user>` - List all quotes from a user
 - `!addquote <user> <quote>` - Add a new quote for an authorized user
 - `!context <quote_id> <text>` - Add context to a specific quote
 - `!commands` - List all available commands
