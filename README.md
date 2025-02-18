@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# borisbot
-a discord bot 
-=======
 # BorisBot - Discord Quote Manager
 
 A Discord bot that manages and recalls quotes from your friends, with context and usage tracking. Perfect for preserving memorable moments and inside jokes from your Discord community.
@@ -147,4 +143,3 @@ You can customize this bot for your server by:
 ## License
 
 MIT License - feel free to use and modify as needed.
->>>>>>> Stashed changes

@@ -1,16 +1,10 @@
 package main
 
 import (
-<<<<<<< Updated upstream
-	"flag"
-	"fmt"
-	"math/rand"
-=======
 	"database/sql"
 	"encoding/json"
 	"flag"
 	"fmt"
->>>>>>> Stashed changes
 	"os"
 	"os/signal"
 	"strings"
@@ -18,10 +12,7 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-<<<<<<< Updated upstream
-=======
 	_ "github.com/mattn/go-sqlite3"
->>>>>>> Stashed changes
 )
 
 // Config holds the bot configuration
@@ -59,7 +50,7 @@ type BackupQuotes struct {
 // Variables used for command line parameters
 var (
 	Token string
-<<<<<<< Updated upstream
+	db    *sql.DB
 )
 
 var borisResponsesSlice = []string{"I'm Inveencible!",
@@ -89,13 +80,6 @@ var peekResponseSlice = []string{"No shot that just happened to you like that...
 	"Purple gimme your money purple",
 	"https://tenor.com/view/eric-andre-eric-andre-eric-andre-show-nightmare-gif-25187817"}
 
-func init() {
-	flag.StringVar(&Token, "t", "", "Bot Token")
-	flag.Parse()
-=======
-	db    *sql.DB
-)
-
 // CommandHandler represents a function that handles a command
 type CommandHandler func(s *discordgo.Session, m *discordgo.MessageCreate) error
 
@@ -103,7 +87,6 @@ type CommandHandler func(s *discordgo.Session, m *discordgo.MessageCreate) error
 type Bot struct {
 	commands map[string]CommandHandler
 	config   Config
->>>>>>> Stashed changes
 }
 
 // NewBot creates a new instance of our bot
@@ -113,8 +96,6 @@ func NewBot(config Config) (*Bot, error) {
 		config:   config,
 	}
 
-<<<<<<< Updated upstream
-=======
 	// Initialize database
 	if err := bot.initDB(); err != nil {
 		return nil, fmt.Errorf("error initializing database: %v", err)
@@ -657,7 +638,6 @@ func main() {
 		return
 	}
 
->>>>>>> Stashed changes
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + config.DiscordToken)
 	if err != nil {
@@ -694,45 +674,3 @@ func main() {
 	// Cleanly close down the Discord session.
 	dg.Close()
 }
-<<<<<<< Updated upstream
-
-// This function will be called (due to AddHandler above) every time a new
-// message is created on any channel that the authenticated bot has access to.
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	fmt.Println("Got msg: ", m.Content)
-	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	//TODO: refactor to map lookup, if successful, get random message from slice pertaining to map entry
-
-	if m.Content == "!boris" {
-		// send a random response
-		message := fmt.Sprint(borisResponsesSlice[rand.Intn(len(borisResponsesSlice))])
-		s.ChannelMessageSend(m.ChannelID, message)
-
-	}
-	if m.Content == "!fran" {
-		// send a random response
-		message := fmt.Sprint(franResponseSlice[rand.Intn(len(franResponseSlice))])
-		s.ChannelMessageSend(m.ChannelID, message)
-
-	}
-	if m.Content == "!peek" {
-		// send a random response
-		message := fmt.Sprint(peekResponseSlice[rand.Intn(len(peekResponseSlice))])
-		s.ChannelMessageSend(m.ChannelID, message)
-
-	}
-
-	if m.Content == "!commands" {
-		// send a random response
-		s.ChannelMessageSend(m.ChannelID, "Available commands: !boris")
-	}
-
-}
-=======
->>>>>>> Stashed changes
